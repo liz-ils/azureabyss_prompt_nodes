@@ -3,6 +3,7 @@ class AddPrefixNode:
 
     CATEGORY = "AzureAbyss/Prompt"
     RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("result",)
     FUNCTION = "add_prefix"
 
     @classmethod
@@ -11,8 +12,13 @@ class AddPrefixNode:
             "required": {
                 "text": ("STRING", {"multiline": True}),
                 "prefix": ("STRING", {"default": "高品質、"}),
+                "mode": (["prefix", "suffix", "both"],),
             }
         }
 
-    def add_prefix(self, text, prefix):
+    def add_prefix(self, text, prefix, mode):
+        if mode == "suffix":
+            return (text + prefix,)
+        if mode == "both":
+            return (prefix + text + prefix,)
         return (prefix + text,)
