@@ -22,3 +22,30 @@ class AddPrefixNode:
         if mode == "both":
             return (prefix + text + prefix,)
         return (prefix + text,)
+
+
+class PromptFormatter:
+    """Format a prompt with optional prefix and suffix text."""
+
+    CATEGORY = "AzureAbyss/Prompt"
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("formatted",)
+    FUNCTION = "format_prompt"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "text": ("STRING", {"multiline": True}),
+                "prefix": ("STRING", {"default": "", "multiline": True}),
+                "suffix": ("STRING", {"default": "", "multiline": True}),
+            }
+        }
+
+    def format_prompt(self, text, prefix, suffix):
+        parts = []
+        for value in (prefix, text, suffix):
+            value = value.strip()
+            if value:
+                parts.append(value)
+        return ("、".join(parts),)
